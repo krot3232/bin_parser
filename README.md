@@ -14,7 +14,7 @@ in
 `mix.exs`
 ```elixir
 def deps do
-  [{:bin_parser, "0.1.0"}]
+  [{:bin_parser, "~> 0.1.0"}]
 end
 ```
 ## Basic Usage
