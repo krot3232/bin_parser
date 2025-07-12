@@ -2,7 +2,7 @@ Binary Parser
 =====
 
 Erlang Library
-=====
+
 
 TEST
 -----

@@ -1,5 +1,5 @@
 {application, bin_parser, [
-    {description, "An OTP library"},
+    {description, "Binary Parser library"},
     {vsn, "0.1.0"},
     {registered, []},
     {applications, [
@@ -10,5 +10,5 @@
     {modules, []},
 
     {licenses, ["Apache-2.0"]},
-    {links, []}
+    {links, [{"GitHub", "https://github.com/krot3232/bin_parser"}]}
 ]}.
