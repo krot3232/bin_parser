@@ -6,10 +6,16 @@ The library parses binary data using a given structure.
 ## Installation
 
 The package can be installed by adding `bin_parser` to your list of dependencies
-in `rebar.config`:
-
+in 
+`rebar.config`:
 ```erlang
 {deps, [{bin_parser, "0.1.0"}]}.
+```
+`mix.exs`
+```elixir
+def deps do
+  [{:bin_parser, "0.1.0"}]
+end
 ```
 ## Basic Usage
 ``` erlang
@@ -19,9 +25,7 @@ in `rebar.config`:
 ```
  Result map:
 ``` erlang
-    {#{name => [<<"qwe">>,<<"123">>,<<"abc">>],
-    var1 => 67305985,
-    var2 => [1541,2055]}.
+    {#{name => [<<"qwe">>,<<"123">>,<<"abc">>],var1 => 67305985,var2 => [1541,2055]}.
 ```
 look at the tests (test/bin_parser_test.erl)
 
