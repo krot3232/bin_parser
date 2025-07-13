@@ -14,7 +14,8 @@
     dword/1,
     big_dword/1,
     qword/1,
-    bit/2
+    bit/2,
+    float/1
 ]).
 
 -export([reverse/1, search/2]).
@@ -148,53 +149,40 @@ bit_acc([], _, Acc) -> Acc;
 bit_acc([KH | KT], [VH | VT], Acc) -> bit_acc(KT, VT, Acc#{KH => VH}).
 
 %BYTE = unsigned 8 bit value
-byte(Bin) ->
-    case Bin of
-        <<I:1/little-unsigned-integer-unit:8, BinNext/binary>> -> {I, BinNext};
-        B -> {binary_to_integer(B), <<>>}
-    end.
+byte(<<I:1/little-unsigned-integer-unit:8, BinNext/binary>>) -> {I, BinNext}.
 
 %WORD = unsigned 16 bit value
-word(Bin) ->
-    case Bin of
-        <<I:2/little-unsigned-integer-unit:8, BinNext/binary>> -> {I, BinNext};
-        B -> {binary_to_integer(B), <<>>}
-    end.
+word(<<I:2/little-unsigned-integer-unit:8, BinNext/binary>>) -> {I, BinNext}.
 
-%typedef uint32_t DWORD;   // DWORD = unsigned 32 bit value
-dword(Bin) ->
-    case Bin of
-        <<I:4/little-unsigned-integer-unit:8, BinNext/binary>> -> {I, BinNext};
-        B -> {binary_to_integer(B), <<>>}
-    end.
-big_dword(Bin) ->
-    case Bin of
-        <<I:4/big-unsigned-integer-unit:8, BinNext/binary>> -> {I, BinNext};
-        B -> {binary_to_integer(B), <<>>}
-    end.
+%DWORD = unsigned 32 bit value
+dword(<<I:4/little-unsigned-integer-unit:8, BinNext/binary>>) -> {I, BinNext}.
+
+big_dword(<<I:4/big-unsigned-integer-unit:8, BinNext/binary>>) -> {I, BinNext}.
+
+float(<<I:32/float-little, BinNext/binary>>) ->
+    Factor = math:pow(10, flooring(6 - math:log10(abs(I)))),
+    {round(I * Factor) / Factor, BinNext}.
 
 %64
-qword(Bin) ->
-    case Bin of
-        <<I:8/little-unsigned-integer-unit:8, BinNext/binary>> -> {I, BinNext};
-        B -> {binary_to_integer(B), <<>>}
-    end.
+qword(<<I:8/little-unsigned-integer-unit:8, BinNext/binary>>) -> {I, BinNext}.
 
 %%FUNC
-reverse(B) -> reverse(B, <<>>).
-reverse(<<>>, Acc) -> Acc;
-reverse(<<H:1/binary, Rest/binary>>, Acc) -> reverse(Rest, <<H/binary, Acc/binary>>).
-
-%%bin_parser:search(<<"TEST">>,<<"11 TEST 11">>).
 search(Var, Bin) -> search(erlang:size(Var), Var, Bin).
-% case search(erlang:size(Var),Var,Bin) of
-%     {false,<<>>}->{false,Bin};
-%     X->X
-% end.
-
 search(I, Var, Bin) ->
     case Bin of
         <<Var:I/binary, BinNext/binary>> -> {true, BinNext};
         <<_:1/binary, BinNext/binary>> -> search(I, Var, BinNext);
         _ -> {false, <<>>}
+    end.
+
+reverse(B) -> reverse(B, <<>>).
+reverse(<<>>, Acc) -> Acc;
+reverse(<<H:1/binary, Rest/binary>>, Acc) -> reverse(Rest, <<H/binary, Acc/binary>>).
+
+flooring(Value) ->
+    Trunc = trunc(Value),
+    if
+        Trunc =< Value -> Trunc;
+        %% for negative values
+        Trunc > Value -> Trunc - 1
     end.

@@ -378,4 +378,18 @@ if_1_test() ->
     {Result1, _BinNext2} = bin_parser:unpack(Type, Bin2),
     ?assertEqual(Result1, #{js => <<"x">>, js2 => <<"s2">>, var1 => 1778647553}).
 
+float_test() ->
+    Type = [{var_float, float, r}],
+    Bin = <<1.123:32/float-little, "123">>,
+    {Result, BinNext} = bin_parser:unpack(Type, Bin),
+    ?assertEqual(Result, #{var_float => 1.123}),
+    ?assertEqual(BinNext, <<"123">>).
+
+float_1_test() ->
+    Type = [{var_float, float, r}],
+    Bin = <<87.01:32/float-little>>,
+    {Result, BinNext} = bin_parser:unpack(Type, Bin),
+    ?assertEqual(Result, #{var_float => 87.01}),
+    ?assertEqual(BinNext, <<>>).
+
 %   ?debugFmt("T ~p ~p", [Result,BinNext]), 
