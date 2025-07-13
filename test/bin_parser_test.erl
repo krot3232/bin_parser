@@ -392,4 +392,11 @@ float_1_test() ->
     ?assertEqual(Result, #{var_float => 87.01}),
     ?assertEqual(BinNext, <<>>).
 
+float_zerro_test() ->
+    Type = [{var_float, float, r}],
+    Bin = <<0, 0, 0, 0>>,
+    {Result, BinNext} = bin_parser:unpack(Type, Bin),
+    ?assertEqual(Result, #{var_float => 0.0}),
+    ?assertEqual(BinNext, <<>>).
+
 %   ?debugFmt("T ~p ~p", [Result,BinNext]), 

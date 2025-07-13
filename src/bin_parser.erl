@@ -160,8 +160,13 @@ dword(<<I:4/little-unsigned-integer-unit:8, BinNext/binary>>) -> {I, BinNext}.
 big_dword(<<I:4/big-unsigned-integer-unit:8, BinNext/binary>>) -> {I, BinNext}.
 
 float(<<I:32/float-little, BinNext/binary>>) ->
-    Factor = math:pow(10, flooring(6 - math:log10(abs(I)))),
-    {round(I * Factor) / Factor, BinNext}.
+    if
+        I =:= 0.0 ->
+            {0.0, BinNext};
+        true ->
+            Factor = math:pow(10, flooring(6 - math:log10(abs(I)))),
+            {round(I * Factor) / Factor, BinNext}
+    end.
 
 %64
 qword(<<I:8/little-unsigned-integer-unit:8, BinNext/binary>>) -> {I, BinNext}.
