@@ -192,6 +192,13 @@ dword_n_test() ->
     ?assertEqual(Result, #{var1 => [1, 2, 3, 4]}),
     ?assertEqual(BinNext, <<>>).
 
+signed_dword_test() ->
+    Type = [{name, signed_dword, r}],
+    Bin = <<16#FF, 16#FF, 16#FF, 16#FF>>,
+    {Result, BinNext} = bin_parser:unpack(Type, Bin),
+    ?assertEqual(Result, #{name => -1}),
+    ?assertEqual(BinNext, <<>>).
+
 qword_test() ->
     Type = [{name, qword, r}],
     Bin = <<"x123456789">>,

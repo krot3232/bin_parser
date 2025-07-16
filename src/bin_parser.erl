@@ -13,6 +13,7 @@
     word/1,
     dword/1,
     big_dword/1,
+    signed_dword/1,
     qword/1,
     bit/2,
     float/1
@@ -158,6 +159,8 @@ word(<<I:2/little-unsigned-integer-unit:8, BinNext/binary>>) -> {I, BinNext}.
 dword(<<I:4/little-unsigned-integer-unit:8, BinNext/binary>>) -> {I, BinNext}.
 
 big_dword(<<I:4/big-unsigned-integer-unit:8, BinNext/binary>>) -> {I, BinNext}.
+
+signed_dword(<<I:4/little-signed-integer-unit:8, BinNext/binary>>) -> {I, BinNext}.
 
 float(<<I:32/float-little, BinNext/binary>>) ->
     if
