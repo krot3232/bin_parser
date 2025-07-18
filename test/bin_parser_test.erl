@@ -353,6 +353,157 @@ bit_test() ->
         }
     }),
     ?assertEqual(BinNext, <<1, 3>>).
+bit_8_test() ->
+    Type = [{bit_var, {bit, [bit1, bit2, bit3, bit4, bit5, bit6, bit7, bit8]}, r}],
+    Bin = <<2#01011000>>,
+    {Result, BinNext} = bin_parser:unpack(Type, Bin),
+    ?assertEqual(Result, #{
+        bit_var => #{
+            bit1 => 0, bit2 => 1, bit3 => 0, bit4 => 1, bit5 => 1, bit6 => 0, bit7 => 0, bit8 => 0
+        }
+    }),
+    ?assertEqual(BinNext, <<>>).
+
+bit_x_test() ->
+    Type = [{bit_var, {bit, [bit1, x, x, x, x, x, x, bit8]}, r}],
+    Bin = <<2#11011001>>,
+    {Result, BinNext} = bin_parser:unpack(Type, Bin),
+    ?assertEqual(Result, #{
+        bit_var => #{
+            bit1 => 1, bit8 => 1
+        }
+    }),
+    ?assertEqual(BinNext, <<>>).
+bit_x_2_test() ->
+    Type = [{bit_var, {bit, [bit1, x, x, x, x, x, x, bit8]}, 2}],
+    Bin = <<2#11011001, 2#01010000>>,
+    {Result, BinNext} = bin_parser:unpack(Type, Bin),
+    ?assertEqual(Result, #{bit_var => [#{bit1 => 1, bit8 => 1}, #{bit1 => 0, bit8 => 0}]}),
+    ?assertEqual(BinNext, <<>>).
+
+bit_9_2_test() ->
+    Type = [
+        {bit_var1, {bit, [bit1, x, x, x, x, x, x, x, bit9]}, r}, {bit_var2, {bit, [bit1, bit2]}, r}
+    ],
+    Bin = <<2#00000000, 2#11010000>>,
+    {Result, BinNext} = bin_parser:unpack(Type, Bin),
+    ?assertEqual(Result, #{bit_var1 => #{bit1 => 0, bit9 => 1}, bit_var2 => #{bit1 => 1, bit2 => 0}}),
+    ?assertEqual(BinNext, <<16:5>>).
+
+bit_16_test() ->
+    Type = [
+        {bit_var, {bit, [b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16]}, r}
+    ],
+    Bin = <<2#11000000, 2#01011000>>,
+    {Result, BinNext} = bin_parser:unpack(Type, Bin),
+    ?assertEqual(
+        Result,
+        #{
+            bit_var =>
+                #{
+                    b1 => 1,
+                    b2 => 1,
+                    b3 => 0,
+                    b4 => 0,
+                    b5 => 0,
+                    b6 => 0,
+                    b7 => 0,
+                    b8 => 0,
+                    b9 => 0,
+                    b10 => 1,
+                    b11 => 0,
+                    b12 => 1,
+                    b13 => 1,
+                    b14 => 0,
+                    b15 => 0,
+                    b16 => 0
+                }
+        }
+    ),
+    ?assertEqual(BinNext, <<>>).
+
+bit_32_test() ->
+    Type = [
+        {bit_var,
+            {bit, [
+                b1,
+                b2,
+                b3,
+                b4,
+                b5,
+                b6,
+                b7,
+                b8,
+                b9,
+                b10,
+                b11,
+                b12,
+                b13,
+                b14,
+                b15,
+                b16,
+                b17,
+                b18,
+                b19,
+                b20,
+                b21,
+                b22,
+                b23,
+                b24,
+                b25,
+                b26,
+                b27,
+                b28,
+                b29,
+                b30,
+                b31,
+                b32
+            ]},
+            r}
+    ],
+    Bin = <<2#11000000, 2#01011000, 2#10000000, 2#10000000>>,
+    {Result, BinNext} = bin_parser:unpack(Type, Bin),
+    ?assertEqual(
+        Result,
+        #{
+            bit_var =>
+                #{
+                    b1 => 1,
+                    b2 => 1,
+                    b3 => 0,
+                    b4 => 0,
+                    b5 => 0,
+                    b6 => 0,
+                    b7 => 0,
+                    b8 => 0,
+                    b9 => 0,
+                    b10 => 1,
+                    b11 => 0,
+                    b12 => 1,
+                    b13 => 1,
+                    b14 => 0,
+                    b15 => 0,
+                    b16 => 0,
+                    b17 => 1,
+                    b18 => 0,
+                    b19 => 0,
+                    b20 => 0,
+                    b21 => 0,
+                    b22 => 0,
+                    b23 => 0,
+                    b24 => 0,
+                    b25 => 1,
+                    b26 => 0,
+                    b27 => 0,
+                    b28 => 0,
+                    b29 => 0,
+                    b30 => 0,
+                    b31 => 0,
+                    b32 => 0
+                }
+        }
+    ),
+    ?assertEqual(BinNext, <<>>).
 
 bit_2_test() ->
     Type = [{bit_var, {bit, 2}, 2}],

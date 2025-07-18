@@ -139,14 +139,15 @@ int(Len, Bin) ->
 
 bit(L, Bin) when is_list(L) ->
     Size = length(L),
-    <<X:Size, BitNext/bitstring>> = Bin,
-    LBit = [B || <<B:1>> <= <<X>>],
+    <<X:Size/bitstring, BitNext/bitstring>> = Bin,
+    LBit = [B || <<B:1>> <= X],
     {bit_acc(L, LBit, maps:new()), BitNext};
 bit(Size, Bin) ->
     <<X:Size, BitNext/bitstring>> = Bin,
     {X, BitNext}.
 
 bit_acc([], _, Acc) -> Acc;
+bit_acc([x | KT], [_ | VT], Acc) -> bit_acc(KT, VT, Acc);
 bit_acc([KH | KT], [VH | VT], Acc) -> bit_acc(KT, VT, Acc#{KH => VH}).
 
 %BYTE = unsigned 8 bit value
