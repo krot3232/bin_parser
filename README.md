@@ -9,12 +9,12 @@ The package can be installed by adding `bin_parser` to your list of dependencies
 in 
 `rebar.config`:
 ```erlang
-{deps, [{bin_parser, "0.1.3"}]}.
+{deps, [{bin_parser, "0.1.4"}]}.
 ```
 `mix.exs`
 ```elixir
 def deps do
-  [{:bin_parser, "~> 0.1.3"}]
+  [{:bin_parser, "~> 0.1.4"}]
 end
 ```
 ## Basic Usage

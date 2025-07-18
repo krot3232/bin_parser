@@ -557,4 +557,18 @@ float_zerro_test() ->
     ?assertEqual(Result, #{var_float => 0.0}),
     ?assertEqual(BinNext, <<>>).
 
+char_test() ->
+    Type = [{var_a, char, r}],
+    Bin = <<"ABCD">>,
+    {Result, BinNext} = bin_parser:unpack(Type, Bin),
+    ?assertEqual(Result, #{var_a => <<"A">>}),
+    ?assertEqual(BinNext, <<"BCD">>).
+
+char_2_test() ->
+    Type = [{var_a, char, r}, {var_b, char, r}, {var_n, char, n}],
+    Bin = <<"ABCD">>,
+    {Result, BinNext} = bin_parser:unpack(Type, Bin),
+    ?assertEqual(Result, #{var_a => <<"A">>, var_b => <<"B">>, var_n => [<<"C">>, <<"D">>]}),
+    ?assertEqual(BinNext, <<>>).
+
 %   ?debugFmt("T ~p ~p", [Result,BinNext]), 

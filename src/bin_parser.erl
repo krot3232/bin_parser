@@ -6,6 +6,7 @@
     string/1,
     string_patern/2,
     bin/2,
+    char/1,
     binary/1,
     hex/2,
     int/2,
@@ -122,6 +123,8 @@ bin(N, B) ->
         <<>> -> {<<>>, <<>>};
         B -> bin(size(B), B)
     end.
+char(<<Result:1/binary, BinNext/binary>>) -> {Result, BinNext}.
+
 binary(Result) -> {Result, <<>>}.
 
 %%hex
